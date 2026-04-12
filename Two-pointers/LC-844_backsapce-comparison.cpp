@@ -26,12 +26,7 @@ res.pop_back();
     int main(){
 string s ="ab#c";
 string t = "ad#c";
-if(backspaceCompare(s,t)){
-        cout<<"true";
-    }
-    else{
-        cout<<"false";
-    }
+if(backspaceCompare)==true;
 
-    return 0;
-}
+
+    }
