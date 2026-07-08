@@ -1,57 +1,58 @@
-class Node{
+class TrieNode{
     public:
-    char data;
-    bool terminal;
-    unordered_map<char,Node*>children;
+    TrieNode* child[26];
+    bool isEnd;
 
-    Node(char ch)
-    {
-        data=ch;
-        terminal =false;
+    TrieNode(){
+        isEnd =false;
 
+        for(int i=0;i<26;i++){
+            child[i] = nullptr;
+        }
     }
 };
 
+
 class WordDictionary {
 public:
-Node* root;
+TrieNode*root;
 
     WordDictionary() {
-        root = new Node('\0');
+        root = new TrieNode();
     }
     
     void addWord(string word) {
-        Node* curr =root;
+        TrieNode* node =root;
+        for(char c:word){
+            int idx = c - 'a';
 
-        for(char ch: word){
-            if(curr->children.count(ch) == 0){
-                curr->children[ch] = new Node(ch);
-            }
-            curr = curr->children[ch];
+            if(!node->child[idx]) 
+            node->child[idx] = new TrieNode();
+
+            node  = node->child[idx];
         }
-        curr->terminal = true;
+        node->isEnd =true;
     }
-    bool dfs(Node* curr,string&word,int idx){
-if(idx == word.size()) return curr->terminal;
 
-char ch =word[idx];
+    bool dfs(string &word,int pos,TrieNode* node){
+        if(!node) return false;
 
-if(ch != '.'){
-    if(curr->children.count(ch) == 0)return false;
-    return dfs(curr->children[ch],word,idx+1);
-}
- for(auto &child : curr->children) {
-        if(dfs(child.second, word, idx + 1))
+    if(pos == word.size())
+    return node->isEnd;
+    
+    char c = word[pos];
+    if(c == '.'){
+        for(int i = 0;i<26;i++){
+            if(dfs(word,pos+1,node->child[i]))
             return true;
-    }
-
-    return false;
-}
-    
-    
+        }
+        return false;
+    }   
+    return dfs(word,pos+1,node->child[c-'a']);
+     }
     
     bool search(string word) {
-        return dfs(root,word,0);
+        return dfs(word,0,root);
     }
 };
 
