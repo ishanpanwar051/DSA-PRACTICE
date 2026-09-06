@@ -1,36 +1,36 @@
 class Solution {
 public:
-    bool search(vector<int>& nums, int target) {
-        int left =0;
-        int right = nums.size()-1;
+    bool search(vector<int>& arr, int k) {
+        int lo = 0;
+        int hi  =arr.size()-1;
+        while(lo<=hi)
+        {
+            int mid = lo+(hi-lo)/2;
 
-        while(left<=right){
-
-            int  mid = left+(right-left) /2;
-
-            if(nums[mid]== target) return true;
-
-            if(nums[left] == nums[mid] && nums[mid] == nums[right]){
-                left++;
-                right--;
-            }
-
-            else if(nums[left] <= nums[mid]){
-                if(nums[left] <= target && target < nums[mid])
-                right = mid -1;
-                 
-                 else 
-                 left = mid+1;
+            if(arr[mid] == k){
+                return true;
 
             }
-            else 
-            {
-                if(nums[mid]<target && target <= nums[right]) 
-                left = mid +1;
+            if(arr[lo] == arr[mid] && arr[mid] == arr[hi]){
+                lo++;
+                hi--;
 
-                else 
-                right =mid - 1;
-
+            }
+            else if(arr[lo]<=arr[mid]){
+                if(arr[lo] <=k &&  k<arr[mid]){
+                    hi = mid-1;
+                }
+                else{
+                    lo = mid+1;
+                }
+            }
+            else {
+                if(arr[mid]<k && k<= arr[hi]){
+                    lo = mid+1;
+                }
+                else{
+                    hi = mid-1;
+                }
             }
         }
         return false;
