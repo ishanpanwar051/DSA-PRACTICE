@@ -12,24 +12,18 @@
 class Solution {
 public:
 
-int maxDia =0;
-int levels(TreeNode*root){
-    if(root == NULL) return 0;
+int height(TreeNode* root ,int& ans){
+    if(root == nullptr) return 0;
+    int lh =height(root->left,ans);
+    int rh  = height(root->right,ans);
+     ans = max(ans,lh+rh);
+    return 1+max(lh,rh);
 
-    return 1+ max(levels(root->left),levels(root->right));
-}
-
-void solve(TreeNode*root){
-    if(root == NULL)return;
-    int dia= levels(root->left)+levels(root->right);
-    maxDia = max(maxDia,dia);
-
-    solve(root->left);
-    solve(root->right);
 }
     int diameterOfBinaryTree(TreeNode* root) {
-         solve(root);
-         return maxDia;
-
+        int ans= 0;
+    
+       height(root,ans);
+        return ans;
     }
 };
