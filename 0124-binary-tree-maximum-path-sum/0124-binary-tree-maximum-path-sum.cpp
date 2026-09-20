@@ -12,21 +12,22 @@
 class Solution {
 public:
 
-int ans =INT_MIN;
+int dfs(TreeNode*root ,int &ans)
+{
+  if(root == nullptr) return 0;
 
-int dfs(TreeNode* root){
-    if(root ==NULL) return 0;
+  int lh = max(0,dfs(root->left,ans));
+  int rh = max(0,dfs(root->right,ans));
 
-    int left = max(0,dfs(root->left));
-    int right = max(0,dfs(root->right));
-
-    ans = max(ans,left+right+root->val);
-
-    return root->val +max(left,right);
+  ans = max(ans,lh+rh+root->val);
+  return root->val + max(lh,rh);
+    
 }
 
     int maxPathSum(TreeNode* root) {
-        dfs(root);
-        return ans;
+     int ans  = INT_MIN;
+     dfs(root,ans);
+     return ans;
+        
     }
 };
