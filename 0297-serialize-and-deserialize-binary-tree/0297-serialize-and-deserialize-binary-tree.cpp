@@ -10,48 +10,45 @@
 class Codec {
 public:
 
-void serializeHelper(TreeNode* root,string&s){
-    if(root == nullptr){
-        s+="#,";
-        return;
-
-    }
-
-    s+=to_string(root->val)+",";
-
-    serializeHelper(root->left,s);
-    serializeHelper(root->right,s);
-
-
-}
-
-
-
-
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        string s;
+        if(!root) return "N,";
+        return to_string(root->val)+ ","+serialize(root->left) + serialize(root->right);
 
-        serializeHelper(root,s);
-        return s;
     }
-TreeNode* deserializeHelper(stringstream &ss){
-    string str;
-    getline(ss,str,',');
-    if(str == "#")return nullptr;
 
-    TreeNode* root = new TreeNode(stoi(str));
+    TreeNode* buildTree(queue<string>&tokens){
+        string token = tokens.front();
+        tokens.pop();
 
-    root->left = deserializeHelper(ss);
-    root->right = deserializeHelper(ss);
-    return root;
-}
+        if(token == "N") return nullptr;
+
+        TreeNode* root= new TreeNode(stoi(token));
+        root->left= buildTree(tokens);
+        root->right  = buildTree(tokens);
+        return root;
+        
+
+        
+
+    }
 
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-        stringstream ss(data);
+       queue<string>tokens;
+       string token;
 
-        return deserializeHelper(ss);
+       for(char c:data){
+        if(c == ','){
+            tokens.push(token);
+            token ="";
+
+        }
+        else{
+            token +=c;
+        }
+       }
+       return buildTree(tokens);
     }
 };
 
