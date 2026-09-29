@@ -1,28 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
-    // Ek node se shuru karke kitne paths hain
-    void helper(TreeNode* root, long long sum, int& count){
-        if(root == NULL) return;
 
-        if(root->val == sum)
-            count++;
+int dfs(TreeNode* root , long currSum ,long target, unordered_map<long, int>& mp){
+    if(!root) return 0;
 
-        helper(root->left,  sum - root->val, count);
-        helper(root->right, sum - root->val, count);
-    }
+    currSum += root->val;
+
+    int count = mp[currSum - target];
+
+    mp[currSum]++;
+
+    count += dfs(root->left, currSum ,target , mp);
+    count +=dfs(root->right , currSum,target , mp);
+
+    mp[currSum]--;
+
+    return count;
+}
 
     int pathSum(TreeNode* root, int targetSum) {
-        if(root == NULL) return 0;
-
-        int count = 0;
-
-        // Is node se shuru hone wale paths
-        helper(root, targetSum, count);
-
-        // Left aur right subtree mein bhi dhundo
-        count += pathSum(root->left,  targetSum);
-        count += pathSum(root->right, targetSum);
-
-        return count;
+        unordered_map<long ,int>mp;
+        mp[0] =1;
+        return dfs(root , 0,targetSum , mp);
     }
 };
