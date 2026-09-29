@@ -11,24 +11,24 @@
  */
 class Solution {
 public:
-int count = 0;
-void helper(TreeNode* root,int mx){
-if(root == NULL ) return ;
-if(root->val >=mx){
-    count++;
-    mx =root->val;
 
-}
-helper(root->left,mx);
-helper(root->right,mx);
+int dfs(TreeNode*  root ,int maxSoFar){
+    if(!root) return 0;
 
+    int count = 0;
+    if(root ->val >= maxSoFar){
+        count = 1;
+    }
+    maxSoFar = max(maxSoFar , root ->val);
 
-        
+    count += dfs(root ->left , maxSoFar);
+    count += dfs(root ->right , maxSoFar);
 
+    return count ;
 }
     int goodNodes(TreeNode* root) {
-        
-helper(root,INT_MIN);
-return count;
+        return dfs(root , INT_MIN);
+
     }
+
 };
